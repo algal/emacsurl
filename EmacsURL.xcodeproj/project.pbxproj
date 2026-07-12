@@ -17,6 +17,7 @@
 		A10000000000000000000008 /* EmacsClientArgumentsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000000000000000000008 /* EmacsClientArgumentsTests.swift */; };
 		A10000000000000000000009 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1000000000000000000000D /* XCTest.framework */; };
 		A1000000000000000000000A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B1000000000000000000000F /* Assets.xcassets */; };
+		A1000000000000000000000B /* StatusWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000000000000000000010 /* StatusWindow.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +46,7 @@
 		B1000000000000000000000D /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = System/Library/Frameworks/XCTest.framework; sourceTree = SDKROOT; };
 		B1000000000000000000000E /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		B1000000000000000000000F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B10000000000000000000010 /* StatusWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusWindow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +89,7 @@
 				B10000000000000000000004 /* EmacsRequest.swift */,
 				B10000000000000000000005 /* EmacsURLApp.swift */,
 				B10000000000000000000006 /* HandlerError.swift */,
+				B10000000000000000000010 /* StatusWindow.swift */,
 				B10000000000000000000009 /* Info.plist */,
 				B1000000000000000000000F /* Assets.xcassets */,
 			);
@@ -224,6 +227,7 @@
 				A10000000000000000000004 /* EmacsRequest.swift in Sources */,
 				A10000000000000000000005 /* EmacsURLApp.swift in Sources */,
 				A10000000000000000000006 /* HandlerError.swift in Sources */,
+				A1000000000000000000000B /* StatusWindow.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

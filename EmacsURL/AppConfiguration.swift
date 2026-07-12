@@ -1,6 +1,6 @@
 import Foundation
 
-enum FrameBehavior: Equatable, Sendable {
+enum FrameBehavior: String, CaseIterable, Equatable, Sendable {
   case newFrame
   case reuseExistingOrCreate
 

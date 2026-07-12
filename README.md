@@ -8,6 +8,19 @@ The app is a resident `LSUIElement` agent: it receives URLs without showing a
 Dock icon, invokes `emacsclient` directly without a shell, and foregrounds the
 running Emacs application after a successful request.
 
+## Running and quitting
+
+Install the app by moving `EmacsURL.app` to `/Applications` and launching it
+once so Launch Services registers the `emacs-file:` scheme. After that you never
+need to start it by hand: macOS launches it on demand whenever an `emacs-file:`
+URL is opened, and it stays resident with no Dock or menu bar icon.
+
+Because it is otherwise invisible, launching the app directly — or re-opening it
+from Finder or Spotlight — shows a small status window. The window confirms the
+helper is running, reports whether `emacsclient` and a running Emacs server can
+be found, lets you choose the frame behavior, and offers a Quit button. Opening
+the app from an `emacs-file:` URL never shows this window; it stays headless.
+
 ## URL contract
 
 The only supported scheme is `emacs-file`:
@@ -67,10 +80,12 @@ emacsclient --no-wait --create-frame -- EMACS_FILENAME
 For a positioned request, `+LINE:COLUMN` is inserted after `--` and before the
 filename.
 
-Frame behavior is intentionally isolated in `FrameBehavior`. The default is
-`.newFrame`. To try reusing an existing frame, change the single default in
-`EmacsURL/AppConfiguration.swift` to `.reuseExistingOrCreate`; this maps to
-`emacsclient --reuse-frame` without changing URL parsing or client execution.
+Frame behavior is a preference in the status window: "Open in a new frame"
+(`emacsclient --create-frame`, the default) or "Reuse an existing frame"
+(`emacsclient --reuse-frame`). The choice is persisted in user defaults and read
+when a URL is handled, without changing URL parsing or client execution. The
+default for a fresh install is the single `frameBehavior` value in
+`EmacsURL/AppConfiguration.swift`.
 
 The app looks for `emacsclient` at:
 
