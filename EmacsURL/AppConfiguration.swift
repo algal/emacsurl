@@ -4,12 +4,19 @@ enum FrameBehavior: String, CaseIterable, Equatable, Sendable {
   case newFrame
   case reuseExistingOrCreate
 
-  var emacsClientArgument: String {
+  /// The frame-related arguments to pass to `emacsclient`.
+  ///
+  /// `--create-frame` forces a new frame. For reuse we deliberately pass *no*
+  /// frame flag: emacsclient's default is to visit the file in the currently
+  /// selected frame, which reliably reuses an existing one. `--reuse-frame`
+  /// (`-r`) looks correct but, on the macOS NS build, creates a new frame when
+  /// the client has no associated display — which is exactly our case.
+  var emacsClientArguments: [String] {
     switch self {
     case .newFrame:
-      "--create-frame"
+      ["--create-frame"]
     case .reuseExistingOrCreate:
-      "--reuse-frame"
+      []
     }
   }
 }

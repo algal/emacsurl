@@ -5,11 +5,9 @@ struct EmacsClientArguments {
     for request: EmacsRequest,
     frameBehavior: FrameBehavior
   ) -> [String] {
-    var arguments = [
-      "--no-wait",
-      frameBehavior.emacsClientArgument,
-      "--",
-    ]
+    var arguments = ["--no-wait"]
+    arguments.append(contentsOf: frameBehavior.emacsClientArguments)
+    arguments.append("--")
 
     if let line = request.line {
       if let column = request.column {
