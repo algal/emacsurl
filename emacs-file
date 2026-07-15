@@ -1,9 +1,16 @@
 #!/usr/bin/env python3
-"""Print an emacs-file: URL for a given file path.
+"""Print a clickable emacs-file: link for a given file path.
 
 On macOS the URL carries the plain local absolute path. Elsewhere it carries a
 TRAMP-style filename (/ssh:<hostname>:<absolute-path>) so that a Mac running the
 EmacsURL helper opens the file on this host over ssh.
+
+The link is emitted as an OSC 8 hyperlink: the terminal makes the visible text
+clickable and hands the emacs-file: URL to the OS on click. This works even for
+custom schemes that a terminal's plain-text URL auto-detector ignores (Ghostty
+only linkifies a short allowlist of schemes; iTerm2 similarly). OSC 8 bypasses
+that allowlist. When stdout is not a terminal (a pipe or file), the plain URL is
+printed instead, so the output stays usable in scripts.
 
 See ~/gits/emacsurl/ for the emacs-file: URL contract.
 """
@@ -24,6 +31,21 @@ def emacs_filename(abspath: str) -> str:
     return f"/ssh:{hostname}:{abspath}"
 
 
+def osc8_hyperlink(url: str, text: str) -> str:
+    """Wrap `text` in an OSC 8 hyperlink pointing at `url`.
+
+    Format: ESC ] 8 ; params ; URI ST  <text>  ESC ] 8 ; ; ST
+    We use BEL (\\a) as the string terminator (ST); it is the most widely
+    compatible terminator across terminals and tmux passthrough. Supported by
+    both Ghostty and iTerm2.
+    """
+    esc = "\033"
+    bel = "\a"
+    start = f"{esc}]8;;{url}{bel}"
+    end = f"{esc}]8;;{bel}"
+    return f"{start}{text}{end}"
+
+
 def main(argv: list[str]) -> int:
     if len(argv) != 2:
         prog = os.path.basename(argv[0]) if argv else "emacs-file"
@@ -34,7 +56,14 @@ def main(argv: list[str]) -> int:
     filename = emacs_filename(abspath)
     # Keep path-legal characters (including TRAMP's colons) literal; encode only
     # characters with structural meaning in a URL. Decoding happens exactly once.
-    print("emacs-file:" + quote(filename, safe="/:~"))
+    url = "emacs-file:" + quote(filename, safe="/:~")
+
+    if sys.stdout.isatty():
+        # Show the URL as the visible link text (so it stays readable and
+        # copyable), with the same URL as the clickable target.
+        print(osc8_hyperlink(url, url))
+    else:
+        print(url)
     return 0
 
 
