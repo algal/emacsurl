@@ -1,0 +1,42 @@
+#!/usr/bin/env python3
+"""Print an emacs-file: URL for a given file path.
+
+On macOS the URL carries the plain local absolute path. Elsewhere it carries a
+TRAMP-style filename (/ssh:<hostname>:<absolute-path>) so that a Mac running the
+EmacsURL helper opens the file on this host over ssh.
+
+See ~/gits/emacsurl/ for the emacs-file: URL contract.
+"""
+
+import os
+import subprocess
+import sys
+from urllib.parse import quote
+
+
+def emacs_filename(abspath: str) -> str:
+    """The string that will be handed to emacsclient, before URL encoding."""
+    if sys.platform == "darwin":
+        return abspath
+    hostname = subprocess.run(
+        ["hostname"], capture_output=True, text=True, check=True
+    ).stdout.strip()
+    return f"/ssh:{hostname}:{abspath}"
+
+
+def main(argv: list[str]) -> int:
+    if len(argv) != 2:
+        prog = os.path.basename(argv[0]) if argv else "emacs-file"
+        print(f"usage: {prog} <path>", file=sys.stderr)
+        return 2
+
+    abspath = os.path.abspath(argv[1])
+    filename = emacs_filename(abspath)
+    # Keep path-legal characters (including TRAMP's colons) literal; encode only
+    # characters with structural meaning in a URL. Decoding happens exactly once.
+    print("emacs-file:" + quote(filename, safe="/:~"))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))
