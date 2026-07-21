@@ -1,5 +1,7 @@
 # EmacsURL
 
+https://github.com/user-attachments/assets/fbcbf1e3-f482-47c6-9c11-dfd47796a653
+
 EmacsURL is a small native macOS helper that opens an Emacs filename in a
 running GUI Emacs server. It supports local filenames and remote filenames
 handled by TRAMP.
