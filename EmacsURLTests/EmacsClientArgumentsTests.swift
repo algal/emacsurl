@@ -30,6 +30,9 @@ final class EmacsClientArgumentsTests: XCTestCase {
   func testCanSwitchToFrameReuseWithoutChangingRequestLogic() throws {
     let request = try request("emacs-file:/tmp/foo")
 
+    // Reuse passes no frame flag: emacsclient's default visits the file in the
+    // current frame. (`--reuse-frame` looks right but creates a new frame on
+    // the macOS NS build.)
     XCTAssertEqual(
       EmacsClientArguments.make(
         for: request,
@@ -37,7 +40,6 @@ final class EmacsClientArgumentsTests: XCTestCase {
       ),
       [
         "--no-wait",
-        "--reuse-frame",
         "--",
         "/tmp/foo",
       ]
