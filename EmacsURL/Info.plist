@@ -26,6 +26,7 @@
             <key>CFBundleURLSchemes</key>
             <array>
                 <string>emacs-file</string>
+                <string>emacsfile</string>
             </array>
         </dict>
     </array>

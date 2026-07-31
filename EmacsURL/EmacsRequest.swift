@@ -14,7 +14,8 @@ struct EmacsRequest: Equatable, Sendable {
         url: url,
         resolvingAgainstBaseURL: false
       ),
-      components.scheme?.lowercased() == "emacs-file"
+      let scheme = components.scheme?.lowercased(),
+      scheme == "emacs-file" || scheme == "emacsfile"
     else {
       throw HandlerError.unsupportedScheme
     }
