@@ -207,6 +207,13 @@ struct StatusView: View {
     }
   }
 
+  // Must run on the main actor: it mutates `@State`, and SwiftUI state
+  // changes have to happen on the main thread. Methods added to a `View`
+  // struct do NOT inherit the `@MainActor` isolation that the `View` protocol
+  // gives to `body`, so without this annotation `refresh()` runs on the
+  // concurrency pool and the mutations below fire off-thread — which makes an
+  // optimized (Release) build abort inside AppKit's window-layout cycle.
+  @MainActor
   private func refresh() async {
     isChecking = true
     status = await checker.check()
